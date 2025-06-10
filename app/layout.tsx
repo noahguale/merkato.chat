@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-	title: 'Merkato',
+	title: 'merkato',
 	description:
 		'Get access to premium AI models including GPT-4, Claude, DeepSeek, Gemini and more. Experience the best AI models in the best AI chat app.',
 }
