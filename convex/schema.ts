@@ -24,7 +24,7 @@ const schema = defineSchema({
 		createdAt: v.number(),
 		updatedAt: v.number(),
 		visibility: v.union(v.literal('visible'), v.literal('archived')),
-		model: v.string(),
+		// model: v.string(),
 		pinned: v.boolean(),
 		branchParentThreadId: v.optional(v.id('threads')),
 		branchParentPublicMessageId: v.optional(v.string()),
@@ -44,7 +44,7 @@ const schema = defineSchema({
 		}),
 	messages: defineTable({
 		userId: v.id('users'),
-		threadId: v.id('threads'),
+		threadId: v.optional(v.id('threads')),
 		reasoning: v.optional(v.string()),
 		content: v.string(),
 		status: MessageStatusValidator,

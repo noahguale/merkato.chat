@@ -6,12 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const maxDuration = 60
 
+export const model = 'gemini-2.0-flash'
 export async function POST(req: NextRequest) {
 	try {
 		const { messages }: { messages: Message[] } = await req.json()
 
 		const result = streamText({
-			model: google('gemini-2.0-flash'),
+			model: google(model),
 			messages,
 			system: system,
 			experimental_transform: smoothStream(),
