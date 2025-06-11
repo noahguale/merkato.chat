@@ -80,9 +80,10 @@ const schema = defineSchema({
 	})
 		.index('by_threadId', ['threadId'])
 		.index('by_thread_and_userid', ['threadId', 'userId'])
-		.index('by_user', ['userId']),
+		.index('by_user', ['userId'])
+		.index('by_threadId_and_createdAt', ['threadId', 'createdAt']),
 	attachments: defineTable({
-		publicMessageIds: v.array(v.id('messages')),
+		messageIds: v.array(v.id('messages')),
 		userId: v.id('users'),
 		attachmentType: v.string(),
 		attachmentUrl: v.string(),
