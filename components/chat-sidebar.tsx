@@ -84,19 +84,21 @@ export function ChatSidebar() {
 				{/* New Chat Button */}
 				<SidebarMenu>
 					<SidebarMenuItem className="font-ibm-plex-mono group select-none text-sm tracking-tight rounded-sm flex gap-1.5 items-center justify-center text-nowrap border transition-colors duration-75 cursor-pointer bg-blue-600 border-transparent text-white [box-shadow:hsl(219,_93%,_30%)_0_-2px_0_0_inset,_hsl(219,_93%,_95%)_0_1px_3px_0] hover:bg-[hsl(219,_93%,_35%)] active:[box-shadow:none] hover:[box-shadow:none] h-9 pl-2.5 pr-3 w-full sm:w-fit">
-						<SidebarMenuButton size={'sm'} className="w-full justify-start">
-							<span>New Chat</span>
-							<Kbd
-								className="h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold text-gray-500 dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 !bg-white/10 !text-white"
-								separator={
-									<span className="text-white">
-										<Plus size={8} />
-									</span>
-								}
-							>
-								<KbdKey aria-label="Meta">⌘</KbdKey>
-								<KbdKey>N</KbdKey>
-							</Kbd>
+						<SidebarMenuButton size={'sm'} className="w-full justify-start" asChild>
+							<a href="/chat">
+								<span>New Chat</span>
+								<Kbd
+									className="h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold text-gray-500 dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 !bg-white/10 !text-white"
+									separator={
+										<span className="text-white">
+											<Plus size={8} />
+										</span>
+									}
+								>
+									<KbdKey aria-label="Meta">⌘</KbdKey>
+									<KbdKey>N</KbdKey>
+								</Kbd>
+							</a>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>

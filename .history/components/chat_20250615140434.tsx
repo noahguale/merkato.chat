@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router'
 import { Id } from '@/convex/_generated/dataModel'
 import { ChatMessage } from './chat-message'
 import { ChatInput } from './chat-input'
+import { useAutoResume } from '@/app/hooks/use-auto-resume'
+import { UIMessage } from 'ai'
 
 interface ChatProps {
 	threadId: string | null
@@ -18,15 +20,25 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 	const setCurrentModel = useModelStore((state) => state.setCurrentModel)
 	const getModelConfig = useModelStore((state) => state.getModelConfig)
 	const createMessage = useMutation(api.chat.createMessage)
+
 	let currentThreadId = threadId
 
-	const { messages, input, handleInputChange, handleSubmit } = useChat({
+	const {
+		messages,
+		input,
+		handleInputChange,
+		handleSubmit,
+		experimental_resume,
+		data,
+		setMessages,
+	} = useChat({
+		id: threadId || undefined,
 		initialMessages,
 		onFinish: async (message) => {
 			if (!currentModel) return
 
 			await createMessage({
-				threadId: currentThreadId ? (currentThreadId as Id<'threads'>) : undefined,
+				threadId: currentThreadId as Id<'threads'>,
 				content: message.content,
 				role: 'assistant',
 				model: currentModel,
@@ -35,7 +47,16 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		body: {
 			model: getModelConfig().id,
 			provider: getModelConfig().provider,
+			threadId: currentThreadId,
 		},
+	})
+
+	useAutoResume({
+		autoResume: !!threadId,
+		initialMessages: initialMessages as UIMessage[],
+		experimental_resume,
+		data,
+		setMessages,
 	})
 
 	const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,7 +65,9 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		if (!currentModel || !input.trim()) return
 
 		const returnedThreadId = await createMessage({
-			threadId: currentThreadId ? (currentThreadId as Id<'threads'>) : undefined,
+			threadId: currentThreadId
+				? (currentThreadId as Id<'threads'>)
+				: undefined,
 			content: input,
 			role: 'user',
 			model: currentModel,
