@@ -12,7 +12,8 @@ const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 export async function POST(req: NextRequest) {
 	try {
-		const { content }: { content: string } = await req.json()
+		const { threadId, content }: { threadId: string; content: string } =
+			await req.json()
 
 		if (!content) {
 			return NextResponse.json(
@@ -66,7 +67,9 @@ export async function POST(req: NextRequest) {
 				maxTokens: 20,
 			})
 
-			return NextResponse.json({ title: result.text.trim() })
+			return NextResponse.json({
+				title: result.text.trim(),
+			})
 		} catch (error) {
 			console.error('[AI_CALL_ERROR]: ', error)
 			return NextResponse.json(

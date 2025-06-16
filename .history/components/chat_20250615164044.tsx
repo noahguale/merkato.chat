@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import { Id } from '@/convex/_generated/dataModel'
 import { ChatMessage } from './chat-message'
 import { ChatInput } from './chat-input'
-import { useThreadTitle } from '@/app/hooks/use-thread-title'
+import { useCompete } from '@/app/hooks/use-compete'
 
 interface ChatProps {
 	threadId: string | null
@@ -41,7 +41,10 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		},
 	})
 
-	const { complete } = useThreadTitle()
+	const { completion } = useCompete({
+		threadId: currentThreadId,
+		content: input,
+	})
 
 	const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -60,13 +63,9 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		if (!currentThreadId && returnedThreadId) {
 			currentThreadId = returnedThreadId
 			navigate(`/chat/${returnedThreadId}`, { replace: true })
-			complete(input.trim(), {
-				body: { threadId: returnedThreadId, needTitle: true },
-			})
+			completion({ threadId: returnedThreadId, content: input })
 		} else {
-			complete(input.trim(), {
-				body: { threadId: currentThreadId },
-			})
+			completion({ threadId: currentThreadId, content: input })
 		}
 
 		handleSubmit(e)

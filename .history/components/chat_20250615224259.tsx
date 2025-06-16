@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import { Id } from '@/convex/_generated/dataModel'
 import { ChatMessage } from './chat-message'
 import { ChatInput } from './chat-input'
-import { useThreadTitle } from '@/app/hooks/use-thread-title'
+import { useThreadTitle } from '@/app/hooks/use-complete'
 
 interface ChatProps {
 	threadId: string | null

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import { Id } from '@/convex/_generated/dataModel'
 import { ChatMessage } from './chat-message'
 import { ChatInput } from './chat-input'
-import { useThreadTitle } from '@/app/hooks/use-thread-title'
+import { useThreadTitle } from '@/app/hooks/use-complete'
 
 interface ChatProps {
 	threadId: string | null
@@ -60,13 +60,12 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		if (!currentThreadId && returnedThreadId) {
 			currentThreadId = returnedThreadId
 			navigate(`/chat/${returnedThreadId}`, { replace: true })
-			complete(input.trim(), {
-				body: { threadId: returnedThreadId, needTitle: true },
+			complete({
+				content: input,
+				{body: { threadId: returnedThreadId, needTitle: true }},
 			})
 		} else {
-			complete(input.trim(), {
-				body: { threadId: currentThreadId },
-			})
+			complete({ content: input, body: { threadId: currentThreadId } })
 		}
 
 		handleSubmit(e)
