@@ -26,14 +26,14 @@ export const AIMessageContent = ({
 }: AIMessageContentProps) => (
 	<div
 		className={cn(
-			'flex flex-col gap-2 rounded-lg px-4 py-3 text-sm sm:max-w-[80%]',
+			'flex flex-col gap-2 rounded-lg px-4 py-3 text-sm max-w-[80%] min-w-0',
 			'bg-muted text-foreground',
 			'group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground',
 			className
 		)}
 		{...props}
 	>
-		<div className="is-user:dark">{children}</div>
+		<div className="is-user:dark min-w-0 overflow-hidden">{children}</div>
 	</div>
 )
 

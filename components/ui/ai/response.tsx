@@ -101,62 +101,115 @@ const components: Options['components'] = {
 		</h6>
 	),
 	code: ({ node, className, children }) => {
-		let language = 'javascript'
+		// Check if this is a fenced code block (has language- className or is multi-line)
+		const hasLanguageClass = (typeof node?.properties?.className === 'string' && 
+			node.properties.className.startsWith('language-')) ||
+			(typeof className === 'string' && className.startsWith('language-'))
+		
+		const isMultiLine = typeof children === 'string' && children.includes('\n')
+		const isCodeBlock = hasLanguageClass || isMultiLine
 
-		if (typeof node?.properties?.className === 'string') {
-			language = node.properties.className.replace('language-', '')
-		}
+		if (isCodeBlock) {
+			// This is a fenced code block - render with full CodeBlock component
+			let language = 'python'
+			if (typeof node?.properties?.className === 'string') {
+				language = node.properties.className.replace('language-', '')
+			} else if (typeof className === 'string' && className.startsWith('language-')) {
+				language = className.replace('language-', '')
+			}
 
-		const data: CodeBlockProps['data'] = [
-			{
-				language,
-				filename: 'index.js',
-				code: children as string,
-			},
-		]
+			// Dynamic filename based on language
+			const getFilename = (lang: string): string => {
+				const extensions: Record<string, string> = {
+					javascript: 'index.js',
+					typescript: 'index.ts',
+					python: 'main.py',
+					java: 'Main.java',
+					cpp: 'main.cpp',
+					c: 'main.c',
+					rust: 'main.rs',
+					go: 'main.go',
+					php: 'index.php',
+					ruby: 'main.rb',
+					swift: 'main.swift',
+					kotlin: 'Main.kt',
+					dart: 'main.dart',
+					html: 'index.html',
+					css: 'styles.css',
+					scss: 'styles.scss',
+					json: 'data.json',
+					xml: 'data.xml',
+					yaml: 'config.yaml',
+					yml: 'config.yml',
+					sql: 'query.sql',
+					bash: 'script.sh',
+					shell: 'script.sh',
+					powershell: 'script.ps1',
+					dockerfile: 'Dockerfile',
+					markdown: 'README.md',
+					txt: 'file.txt'
+				}
+				return extensions[lang.toLowerCase()] || `file.${lang}`
+			}
 
-		return (
-			<CodeBlock
-				className={cn('my-4', className)}
-				data={data}
-				defaultValue={data[0].language}
-			>
-				<CodeBlockHeader>
-					<CodeBlockFiles>
-						{(item) => (
-							<CodeBlockFilename key={item.language} value={item.language}>
-								{item.filename}
-							</CodeBlockFilename>
-						)}
-					</CodeBlockFiles>
-					<CodeBlockSelect>
-						<CodeBlockSelectTrigger>
-							<CodeBlockSelectValue />
-						</CodeBlockSelectTrigger>
-						<CodeBlockSelectContent>
+			const data: CodeBlockProps['data'] = [
+				{
+					language,
+					filename: getFilename(language),
+					code: children as string,
+				},
+			]
+
+			return (
+				<CodeBlock
+					className={cn('my-4', className)}
+					data={data}
+					defaultValue={data[0].language}
+				>
+					<CodeBlockHeader>
+						<CodeBlockFiles>
 							{(item) => (
-								<CodeBlockSelectItem key={item.language} value={item.language}>
-									{item.language}
-								</CodeBlockSelectItem>
+								<CodeBlockFilename key={item.language} value={item.language}>
+									{item.filename}
+								</CodeBlockFilename>
 							)}
-						</CodeBlockSelectContent>
-					</CodeBlockSelect>
-					<CodeBlockCopyButton
-						onCopy={() => console.log('Copied code to clipboard')}
-						onError={() => console.error('Failed to copy code to clipboard')}
-					/>
-				</CodeBlockHeader>
-				<CodeBlockBody>
-					{(item) => (
-						<CodeBlockItem key={item.language} value={item.language}>
-							<CodeBlockContent language={item.language as BundledLanguage}>
-								{item.code}
-							</CodeBlockContent>
-						</CodeBlockItem>
-					)}
-				</CodeBlockBody>
-			</CodeBlock>
-		)
+						</CodeBlockFiles>
+						<CodeBlockSelect>
+							<CodeBlockSelectTrigger>
+								<CodeBlockSelectValue />
+							</CodeBlockSelectTrigger>
+							<CodeBlockSelectContent>
+								{(item) => (
+									<CodeBlockSelectItem key={item.language} value={item.language}>
+										{item.language}
+									</CodeBlockSelectItem>
+								)}
+							</CodeBlockSelectContent>
+						</CodeBlockSelect>
+						<CodeBlockCopyButton
+							onCopy={() => console.log('Copied code to clipboard')}
+							onError={() => console.error('Failed to copy code to clipboard')}
+						/>
+					</CodeBlockHeader>
+					<CodeBlockBody>
+						{(item) => (
+							<CodeBlockItem key={item.language} value={item.language}>
+								<CodeBlockContent language={item.language as BundledLanguage}>
+									{item.code}
+								</CodeBlockContent>
+							</CodeBlockItem>
+						)}
+					</CodeBlockBody>
+				</CodeBlock>
+			)
+		} else {
+			// This is inline code - just add simple highlighting
+			return (
+				<code className={cn('bg-muted px-1.5 py-0.5 rounded text-sm font-mono', className)}>
+					{children}
+				</code>
+			)
+		}
 	},
 }
 
