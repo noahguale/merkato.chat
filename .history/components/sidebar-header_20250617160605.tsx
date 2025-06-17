@@ -44,7 +44,7 @@ export const SideHeader = () => {
 			<div className="hidden group-data-[collapsible=icon]:flex flex-col items-center gap-2">
 				<SidebarTrigger className="size-10" />
 				<div className="flex flex-col items-center gap-2 mt-10">
-					<Button variant="blue" size="icon" className="size-8" asChild>
+					<Button variant="blue" size="icon" className="size-10" asChild>
 						<a href="/chat">
 							<MessageSquarePlus className="size-5" animateOnHover />
 							<span className="sr-only">New Chat</span>
@@ -53,7 +53,7 @@ export const SideHeader = () => {
 					<Button
 						variant="ghost"
 						size="icon"
-						className="size-8"
+						className="size-10"
 						onClick={() => {
 							const searchInput = document.querySelector(
 								'input[placeholder="Search your threads..."]'

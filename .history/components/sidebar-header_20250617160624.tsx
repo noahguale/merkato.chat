@@ -53,7 +53,7 @@ export const SideHeader = () => {
 					<Button
 						variant="ghost"
 						size="icon"
-						className="size-8"
+						className="size-10"
 						onClick={() => {
 							const searchInput = document.querySelector(
 								'input[placeholder="Search your threads..."]'

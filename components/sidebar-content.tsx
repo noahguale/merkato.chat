@@ -181,14 +181,9 @@ export const SideContent = () => {
 		)
 	}
 
-	// Hide content when collapsed - let the CSS handle the icon state
-	if (state === 'collapsed') {
-		return <SidebarContent className="overflow-hidden" />
-	}
-
 	return (
-		<SidebarContent className="overflow-hidden">
-			<motion.div className="space-y-6 p-4 overflow-y-auto scrollbar-hide">
+		<SidebarContent className="overflow-hidden group-data-[collapsible=icon]:overflow-hidden">
+			<motion.div className="space-y-6 p-4 overflow-y-auto scrollbar-hide group-data-[collapsible=icon]:hidden">
 				<LayoutGroup>
 					{/* Pinned Threads Section */}
 					<div>

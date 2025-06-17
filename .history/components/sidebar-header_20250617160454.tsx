@@ -1,5 +1,6 @@
 'use client'
 
+import { Search } from 'lucide-react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
@@ -11,7 +12,6 @@ import {
 import { Button } from './ui/button'
 import { Kbd, KbdKey } from './ui/kdb'
 import { MessageSquarePlus } from './animate-ui/icons/message-square-plus'
-import { Search } from './animate-ui/icons/search'
 
 export const SideHeader = () => {
 	const router = useRouter()
@@ -44,16 +44,16 @@ export const SideHeader = () => {
 			<div className="hidden group-data-[collapsible=icon]:flex flex-col items-center gap-2">
 				<SidebarTrigger className="size-10" />
 				<div className="flex flex-col items-center gap-2 mt-10">
-					<Button variant="blue" size="icon" className="size-8" asChild>
+					<Button variant="blue" size="icon" className="size-10" asChild>
 						<a href="/chat">
-							<MessageSquarePlus className="size-5" animateOnHover />
+							<MessageSquarePlus className="size-6" animateOnHover />
 							<span className="sr-only">New Chat</span>
 						</a>
 					</Button>
 					<Button
 						variant="ghost"
 						size="icon"
-						className="size-8"
+						className="size-10"
 						onClick={() => {
 							const searchInput = document.querySelector(
 								'input[placeholder="Search your threads..."]'
@@ -63,7 +63,7 @@ export const SideHeader = () => {
 							}
 						}}
 					>
-						<Search className="size-5" animateOnHover />
+						<Search className="size-4" />
 						<span className="sr-only">Search</span>
 					</Button>
 				</div>{' '}
