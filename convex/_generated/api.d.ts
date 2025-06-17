@@ -18,7 +18,6 @@ import type * as chat from "../chat.js";
 import type * as http from "../http.js";
 import type * as lib_encryption from "../lib/encryption.js";
 import type * as providerConfig from "../providerConfig.js";
-import type * as stream from "../stream.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -34,7 +33,6 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   "lib/encryption": typeof lib_encryption;
   providerConfig: typeof providerConfig;
-  stream: typeof stream;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
