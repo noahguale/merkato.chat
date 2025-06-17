@@ -291,7 +291,7 @@ export const SideContent = () => {
 								}}
 								className="w-full h-8 text-xs"
 							>
-								View All
+								Search...
 							</Button>
 						</div>
 					)}

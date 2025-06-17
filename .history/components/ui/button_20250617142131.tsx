@@ -20,8 +20,8 @@ const buttonVariants = cva(
 				ghost:
 					'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
 				link: 'text-primary underline-offset-4 hover:underline',
-				glass:
-					'rounded border bg-muted px-1.5 align-middle font-medium font-mono text-[10px] text-muted-foreground leading-loose hover:bg-muted/80',
+				ghost:
+					'bg-[#f5f5f5] border-transparent text-[#a1a1a1] [box-shadow:hsl(0,_0%,_85%)_0_-2px_0_0_inset] dark:[box-shadow:hsl(0,_0%,_85%)_0_-2px_0_0_inset,_hsl(0,_0%,_0%,_0.2)_0_1px_3px_0] hover:bg-[#e5e5e5] hover:text-[#737373] active:[box-shadow:none] hover:[box-shadow:none] transition-colors duration-75',
 				blue: 'bg-primary border-transparent text-white [box-shadow:hsl(219,_93%,_30%)_0_-2px_0_0_inset] dark:[box-shadow:hsl(219,_93%,_30%)_0_-2px_0_0_inset,_hsl(0,_0%,_0%,_0.4)_0_1px_3px_0] hover:bg-[hsl(219,_93%,_35%)] hover:bg-[hsl(219,_93%,_35%)] active:[box-shadow:none] hover:[box-shadow:none] transition-colors duration-75', // blue: 'bg-primary border-transparent text-white [box-shadow:hsl(219,_93%,_25%)_0_-3px_2px_1px_inset] hover:bg-[hsl(219,_93%,_35%)] active:[box-shadow:none] hover:[box-shadow:none] transition-colors duration-75',
 			},
 			size: {
