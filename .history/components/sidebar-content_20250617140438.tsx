@@ -10,13 +10,11 @@ import { useState } from 'react'
 import { Pin } from './animate-ui/icons/pin'
 import { PinOff } from './animate-ui/icons/pin-off'
 import { MessageSquare } from './animate-ui/icons/message-square'
-import { Trash } from './animate-ui/icons/trash'
 
 export const SideContent = () => {
 	const threads = useQuery(api.chat.getThreads)
 	const pinnedThreads = useQuery(api.chat.getPinnedThreads)
 	const togglePin = useMutation(api.chat.toggleThreadPin)
-	const deleteThread = useMutation(api.chat.deleteThread)
 
 	const [togglingGroup, setTogglingGroup] = useState<
 		'pinned' | 'unpinned' | null
@@ -34,14 +32,6 @@ export const SideContent = () => {
 		} catch (error) {
 			console.error('Failed to toggle pin:', error)
 			setTogglingGroup(null)
-		}
-	}
-
-	const handleDeleteThread = async (threadId: Id<'threads'>) => {
-		try {
-			await deleteThread({ threadId })
-		} catch (error) {
-			console.error('Failed to delete thread:', error)
 		}
 	}
 
@@ -94,10 +84,7 @@ export const SideContent = () => {
 										>
 											<div className="flex items-center gap-2 min-w-0 flex-1">
 												<div className="rounded-md bg-sidebar p-1.5">
-													<MessageSquare
-														className="size-4 text-sidebar-foreground"
-														animateOnHover
-													/>
+													<MessageSquare className="size-4 text-sidebar-foreground" />
 												</div>
 												<div className="min-w-0 flex-1">
 													<div className="text-sm font-medium text-sidebar-accent-foreground truncate">
@@ -108,35 +95,21 @@ export const SideContent = () => {
 													</div>
 												</div>
 											</div>
-											<div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-												<motion.button
-													onClick={(e) => {
-														e.preventDefault()
-														e.stopPropagation()
-														handleTogglePin(thread.id, true)
-													}}
-													className="flex items-center justify-center size-7 text-primary"
-													whileHover={{ scale: 1.05 }}
-													whileTap={{ scale: 0.95 }}
-												>
-													<PinOff
-														className="size-3 fill-current"
-														animateOnHover
-													/>
-												</motion.button>
-												<motion.button
-													onClick={(e) => {
-														e.preventDefault()
-														e.stopPropagation()
-														handleDeleteThread(thread.id)
-													}}
-													className="flex items-center justify-center size-7 text-destructive rounded-lg hover:bg-destructive/80 hover:text-destructive-foreground transition-colors"
-													whileHover={{ scale: 1.05 }}
-													whileTap={{ scale: 0.95 }}
-												>
-													<Trash className="size-3" animateOnHover />
-												</motion.button>
-											</div>
+											<motion.button
+												onClick={(e) => {
+													e.preventDefault()
+													e.stopPropagation()
+													handleTogglePin(thread.id, true)
+												}}
+												className="flex items-center justify-center size-7   text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+												whileHover={{ scale: 1.05 }}
+												whileTap={{ scale: 0.95 }}
+											>
+												<PinOff
+													className="size-3 fill-current"
+													animateOnHover
+												/>
+											</motion.button>
 										</motion.a>
 									</motion.div>
 								))}
@@ -183,10 +156,7 @@ export const SideContent = () => {
 											>
 												<div className="flex items-center gap-2 min-w-0 flex-1">
 													<div className="rounded-md bg-sidebar-accent/20 p-1.5">
-														<MessageSquare
-															className="size-4 text-sidebar-foreground"
-															animateOnHover
-														/>
+														<MessageSquare className="size-4 text-sidebar-foreground" />
 													</div>
 													<div className="min-w-0 flex-1">
 														<div className="text-sm font-medium text-sidebar-foreground truncate">
@@ -197,35 +167,18 @@ export const SideContent = () => {
 														</div>
 													</div>
 												</div>
-												<div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-													<motion.button
-														onClick={(e) => {
-															e.preventDefault()
-															e.stopPropagation()
-															handleTogglePin(thread.id, false)
-														}}
-														className="flex items-center justify-center size-7 text-muted-foreground"
-														whileHover={{ scale: 1.05 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														<Pin
-															className="size-3 fill-current"
-															animateOnHover
-														/>
-													</motion.button>
-													<motion.button
-														onClick={(e) => {
-															e.preventDefault()
-															e.stopPropagation()
-															handleDeleteThread(thread.id)
-														}}
-														className="flex items-center justify-center size-7 text-destructive rounded-lg hover:bg-destructive/80 hover:text-destructive-foreground transition-colors"
-														whileHover={{ scale: 1.05 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														<Trash className="size-3" animateOnHover />
-													</motion.button>
-												</div>
+												<motion.button
+													onClick={(e) => {
+														e.preventDefault()
+														e.stopPropagation()
+														handleTogglePin(thread.id, false)
+													}}
+													className="flex items-center justify-center size-7 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+													whileHover={{ scale: 1.05 }}
+													whileTap={{ scale: 0.95 }}
+												>
+													<Pin className="size-3 fill-current" animateOnHover />
+												</motion.button>
 											</motion.a>
 										</motion.div>
 									))}

@@ -130,7 +130,7 @@ export const SideContent = () => {
 														e.stopPropagation()
 														handleDeleteThread(thread.id)
 													}}
-													className="flex items-center justify-center size-7 text-destructive rounded-lg hover:bg-destructive/80 hover:text-destructive-foreground transition-colors"
+													className="flex items-center justify-center size-7 text-destructive rounded-lg hover:bg-destructive/50 hover:text-destructive-foreground transition-colors"
 													whileHover={{ scale: 1.05 }}
 													whileTap={{ scale: 0.95 }}
 												>
@@ -219,7 +219,7 @@ export const SideContent = () => {
 															e.stopPropagation()
 															handleDeleteThread(thread.id)
 														}}
-														className="flex items-center justify-center size-7 text-destructive rounded-lg hover:bg-destructive/80 hover:text-destructive-foreground transition-colors"
+														className="flex items-center justify-center size-7 text-destructive rounded-lg hover:bg-destructive hover:text-destructive-foreground transition-colors"
 														whileHover={{ scale: 1.05 }}
 														whileTap={{ scale: 0.95 }}
 													>
