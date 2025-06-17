@@ -1,6 +1,6 @@
 'use client'
 
-import { MessageSquare } from 'lucide-react'
+import { Pin, MessageSquare } from 'lucide-react'
 import { motion, LayoutGroup, AnimatePresence } from 'motion/react'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
@@ -8,9 +8,6 @@ import { Id } from '@/convex/_generated/dataModel'
 import { SidebarContent } from './animate-ui/radix/sidebar'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
-import { Pin } from './animate-ui/icons/pin'
-import { PinOff } from './animate-ui/icons/pin-off'
-import { AnimateIcon } from './animate-ui/icons/icon'
 
 export const SideContent = () => {
 	const threads = useQuery(api.chat.getThreads)
@@ -44,8 +41,8 @@ export const SideContent = () => {
 	}
 
 	return (
-		<SidebarContent className="overflow-hidden">
-			<motion.div className="space-y-6 p-4 overflow-y-auto scrollbar-hide">
+		<SidebarContent className="bg-sidebar-accent p-2">
+			<motion.div className="space-y-6 p-2">
 				<LayoutGroup>
 					{/* Pinned Threads Section */}
 					<div>
@@ -102,14 +99,11 @@ export const SideContent = () => {
 													e.stopPropagation()
 													handleTogglePin(thread.id, true)
 												}}
-												className="flex items-center justify-center size-7   text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+												className="flex items-center justify-center size-7 rounded-full bg-primary text-primary-foreground"
 												whileHover={{ scale: 1.05 }}
 												whileTap={{ scale: 0.95 }}
 											>
-												<PinOff
-													className="size-3 fill-current"
-													animateOnHover
-												/>
+												<Pin className="size-3 fill-current" />
 											</motion.button>
 										</motion.a>
 									</motion.div>
@@ -174,11 +168,11 @@ export const SideContent = () => {
 														e.stopPropagation()
 														handleTogglePin(thread.id, false)
 													}}
-													className="flex items-center justify-center size-7 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+													className="flex items-center justify-center size-7 rounded-full bg-sidebar-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
 													whileHover={{ scale: 1.05 }}
 													whileTap={{ scale: 0.95 }}
 												>
-													<Pin className="size-3 fill-current" animateOnHover />
+													<Pin className="size-3 text-sidebar-accent-foreground" />
 												</motion.button>
 											</motion.a>
 										</motion.div>

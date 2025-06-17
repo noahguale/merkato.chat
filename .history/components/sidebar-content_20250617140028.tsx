@@ -174,7 +174,7 @@ export const SideContent = () => {
 														e.stopPropagation()
 														handleTogglePin(thread.id, false)
 													}}
-													className="flex items-center justify-center size-7 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+													className="flex items-center justify-center size-7 rounded-full bg-sidebar-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
 													whileHover={{ scale: 1.05 }}
 													whileTap={{ scale: 0.95 }}
 												>

@@ -54,8 +54,8 @@ const USER_DATA = {
 
 export function ChatSidebar() {
 	const isMobile = useIsMobile()
-	// const threads = useQuery(api.chat.getThreads)
-	// const pinnedThreads = useQuery(api.chat.getPinnedThreads)
+	const threads = useQuery(api.chat.getThreads)
+	const pinnedThreads = useQuery(api.chat.getPinnedThreads)
 
 	return (
 		<Sidebar collapsible="icon">
