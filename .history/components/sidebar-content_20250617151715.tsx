@@ -138,7 +138,7 @@ export const SideContent = () => {
 										/>
 									</div>
 									<div className="min-w-0 flex-1">
-										<div className="text-xs font-medium text-sidebar-foreground truncate">
+										<div className="text-sm font-medium text-sidebar-foreground truncate">
 											{thread.title || 'New Chat'}
 										</div>
 										<div className="text-xs text-sidebar-foreground/60">

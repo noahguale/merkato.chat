@@ -51,6 +51,7 @@ export const SideHeader = () => {
 				className=" font-ibm-plex-mono p-5 "
 				asChild
 			>
+				<MessageSquarePlus animateOnHover />
 				<a href="/chat">
 					<span>New Chat</span>
 					<Kbd className="h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 !bg-white/10 !text-white">

@@ -14,7 +14,9 @@ export function ChatSidebar() {
 	return (
 		<Sidebar collapsible="icon">
 			<SideHeader />
+
 			<SideContent />
+
 			<SideFooter isMobile={isMobile} />
 			<SidebarRail />
 		</Sidebar>

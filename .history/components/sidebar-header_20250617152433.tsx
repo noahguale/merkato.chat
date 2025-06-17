@@ -10,7 +10,6 @@ import {
 } from './animate-ui/radix/sidebar'
 import { Button } from './ui/button'
 import { Kbd, KbdKey } from './ui/kdb'
-import { MessageSquarePlus } from './animate-ui/icons/message-square-plus'
 
 export const SideHeader = () => {
 	const router = useRouter()
