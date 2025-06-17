@@ -16,6 +16,7 @@ import {
 	SidebarMenuItem,
 	SidebarMenu,
 	SidebarMenuButton,
+	useSidebar,
 } from './animate-ui/radix/sidebar'
 
 import { SignOut } from './sign-out'
@@ -31,6 +32,79 @@ interface SideFooterProps {
 }
 
 export const SideFooter = ({ isMobile }: SideFooterProps) => {
+	const { state } = useSidebar()
+
+	if (state === 'collapsed') {
+		return (
+			<SidebarFooter className="p-2">
+				<SidebarMenu>
+					<SidebarMenuItem>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<SidebarMenuButton
+									size="default"
+									className="size-8 p-0 justify-center"
+								>
+									<Avatar className="h-6 w-6 rounded-lg">
+										<AvatarImage src={USER_DATA.avatar} alt={USER_DATA.name} />
+										<AvatarFallback className="rounded-lg text-xs">U</AvatarFallback>
+									</Avatar>
+								</SidebarMenuButton>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent
+								className="w-56 rounded-lg"
+								side="right"
+								align="end"
+								sideOffset={4}
+							>
+								<DropdownMenuLabel className="p-0 font-normal">
+									<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+										<Avatar className="h-8 w-8 rounded-lg">
+											<AvatarImage src={USER_DATA.avatar} alt={USER_DATA.name} />
+											<AvatarFallback className="rounded-lg">U</AvatarFallback>
+										</Avatar>
+										<div className="grid flex-1 text-left text-sm leading-tight">
+											<span className="truncate font-semibold">
+												{USER_DATA.name}
+											</span>
+											<span className="truncate text-xs">{USER_DATA.email}</span>
+										</div>
+									</div>
+								</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuGroup>
+									<DropdownMenuItem>
+										<Sparkles />
+										Upgrade to Pro
+									</DropdownMenuItem>
+								</DropdownMenuGroup>
+								<DropdownMenuSeparator />
+								<DropdownMenuGroup>
+									<DropdownMenuItem>
+										<BadgeCheck />
+										Account
+									</DropdownMenuItem>
+									<DropdownMenuItem>
+										<CreditCard />
+										Billing
+									</DropdownMenuItem>
+									<DropdownMenuItem>
+										<Bell />
+										Notifications
+									</DropdownMenuItem>
+								</DropdownMenuGroup>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>
+									<SignOut />
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarFooter>
+		)
+	}
+
 	return (
 		<SidebarFooter>
 			<SidebarMenu>

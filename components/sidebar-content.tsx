@@ -4,7 +4,7 @@ import { motion, LayoutGroup, AnimatePresence } from 'motion/react'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
-import { SidebarContent } from './animate-ui/radix/sidebar'
+import { SidebarContent, useSidebar } from './animate-ui/radix/sidebar'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { Pin } from './animate-ui/icons/pin'
@@ -14,6 +14,7 @@ import { Trash } from './animate-ui/icons/trash'
 import { Button } from './ui/button'
 
 export const SideContent = () => {
+	const { state } = useSidebar()
 	const threads = useQuery(api.chat.getThreads)
 	const pinnedThreads = useQuery(api.chat.getPinnedThreads)
 	const togglePin = useMutation(api.chat.toggleThreadPin)
@@ -178,6 +179,11 @@ export const SideContent = () => {
 				</div>
 			</div>
 		)
+	}
+
+	// Hide content when collapsed - let the CSS handle the icon state
+	if (state === 'collapsed') {
+		return <SidebarContent className="overflow-hidden" />
 	}
 
 	return (

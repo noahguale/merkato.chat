@@ -7,15 +7,12 @@ import {
 	SidebarHeader,
 	SidebarInput,
 	SidebarTrigger,
-	useSidebar,
 } from './animate-ui/radix/sidebar'
 import { Button } from './ui/button'
 import { Kbd, KbdKey } from './ui/kdb'
-import { MessageSquarePlus } from './animate-ui/icons/message-square-plus'
 
 export const SideHeader = () => {
 	const router = useRouter()
-	const { state } = useSidebar()
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -37,43 +34,6 @@ export const SideHeader = () => {
 		document.addEventListener('keydown', down)
 		return () => document.removeEventListener('keydown', down)
 	}, [router])
-
-	if (state === 'collapsed') {
-		return (
-			<SidebarHeader className="p-2 space-y-2">
-				<div className="flex flex-col items-center gap-2">
-					<SidebarTrigger className="size-8" />
-					<Button
-						variant="ghost"
-						size="icon"
-						className="size-8"
-						asChild
-					>
-						<a href="/chat">
-							<MessageSquarePlus className="size-4" animateOnHover />
-							<span className="sr-only">New Chat</span>
-						</a>
-					</Button>
-					<Button
-						variant="ghost"
-						size="icon"
-						className="size-8"
-						onClick={() => {
-							const searchInput = document.querySelector(
-								'input[placeholder="Search your threads..."]'
-							) as HTMLInputElement
-							if (searchInput) {
-								searchInput.focus()
-							}
-						}}
-					>
-						<Search className="size-4" />
-						<span className="sr-only">Search</span>
-					</Button>
-				</div>
-			</SidebarHeader>
-		)
-	}
 
 	return (
 		<SidebarHeader className="p-4 space-y-4">
