@@ -17,7 +17,6 @@ import {
 	CodeBlockSelectTrigger,
 	CodeBlockSelectValue,
 } from '@/components/ui/code-block'
-import { memo } from 'react'
 import type { HTMLAttributes } from 'react'
 import ReactMarkdown, { type Options } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -32,7 +31,7 @@ const components: Options['components'] = {
 		</ol>
 	),
 	li: ({ node, children, className, ...props }) => (
-		<li className={cn('py-1', className)} {...props}>
+		<li className={cn('py-1 text-base', className)} {...props}>
 			{children}
 		</li>
 	),
@@ -157,23 +156,20 @@ const components: Options['components'] = {
 	},
 }
 // eslint-disable-next-line react/display-name
-export const AIResponse = memo(
-	({ className, options, children, ...props }: AIResponseProps) => (
-		<div
-			className={cn(
-				'size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
-				className
-			)}
-			{...props}
+export const AIResponse = ({ className, options, children, ...props }: AIResponseProps) => (
+	<div
+		className={cn(
+			'size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
+			className
+		)}
+		{...props}
+	>
+		<ReactMarkdown
+			remarkPlugins={[remarkGfm]}
+			components={components}
+			{...options}
 		>
-			<ReactMarkdown
-				remarkPlugins={[remarkGfm]}
-				components={components}
-				{...options}
-			>
-				{children}
-			</ReactMarkdown>
-		</div>
-	),
-	(prevProps, nextProps) => prevProps.children === nextProps.children
+			{children}
+		</ReactMarkdown>
+	</div>
 )

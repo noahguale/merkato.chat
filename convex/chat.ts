@@ -138,3 +138,52 @@ export const updateThreadTitle = mutation({
 		await _.db.patch(args.threadId, { title: args.title })
 	},
 })
+
+export const toggleThreadPin = mutation({
+	args: {
+		threadId: v.id('threads'),
+	},
+	handler: async (ctx, args) => {
+		const userId = await getAuthUserId(ctx)
+		if (!userId) throw new Error('Unauthorized')
+
+		const thread = await ctx.db.get(args.threadId)
+		if (!thread || thread.userId !== userId) {
+			throw new Error('Thread not found or unauthorized')
+		}
+
+		await ctx.db.patch(args.threadId, { 
+			pinned: !thread.pinned,
+			updatedAt: Date.now()
+		})
+
+		return !thread.pinned
+	},
+})
+
+export const getPinnedThreads = query({
+	args: {},
+	handler: async (ctx) => {
+		const userId = await getAuthUserId(ctx)
+		if (!userId) {
+			throw new Error('Unauthorized')
+		}
+
+		const threads = await ctx.db
+			.query('threads')
+			.withIndex('by_user_and_pinned', (q) => 
+				q.eq('userId', userId).eq('pinned', true)
+			)
+			.order('desc')
+			.collect()
+
+		return threads.map((thread) => ({
+			id: thread._id,
+			title: thread.title,
+			createdAt: thread.createdAt,
+			updatedAt: thread.updatedAt,
+			model: thread.model,
+			pinned: thread.pinned,
+		}))
+	},
+})
