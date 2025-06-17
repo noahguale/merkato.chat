@@ -1,0 +1,3 @@
+export const Home = () => {
+	return <div class="flex h-full flex-col items-center justify-center gap-2"><h1 class="font-lora text-pretty scroll-mt-24 h0 text-accent-blue dark:text-blue-300 font-normal text-center !text-balance">The editor for what's next</h1><p class="tracking-tight text-center max-w-lg text-pretty">Zed is a next-generation code editor designed for<!-- --> <span class="whitespace-nowrap">high-performance</span> <!-- -->collaboration with humans and AI.</p></div>
+}

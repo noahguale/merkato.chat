@@ -11,6 +11,7 @@ import './globals.css'
 import { ConvexClientProvider } from '@/components/convex-client-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { GlobalThreadMenu } from '@/components/thread-menu'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -65,6 +66,7 @@ export default function RootLayout({
 						<ConvexClientProvider>
 							{children}
 							<Toaster />
+							<GlobalThreadMenu />
 						</ConvexClientProvider>
 					</ThemeProvider>
 				</body>

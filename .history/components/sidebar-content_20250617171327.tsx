@@ -280,6 +280,16 @@ export const SideContent = () => {
 					{renderThreadGroup(threadGroups.lastMonth, 'Last 30 Days')}
 					{renderThreadGroup(threadGroups.older, 'Older')}
 
+					{/* Thread Search Menu */}
+					{threads && threads.filter((t) => !t.pinned).length > 0 && (
+						<div className="px-3">
+							<ThreadMenu
+								placeholder="Search threads..."
+								triggerText="Search all threads..."
+								triggerClassName="w-full h-8 text-xs"
+							/>
+						</div>
+					)}
 
 					{/* No chats message */}
 					{threads?.length === 0 && (

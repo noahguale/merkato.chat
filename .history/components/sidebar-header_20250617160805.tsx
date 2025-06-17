@@ -23,15 +23,15 @@ export const SideHeader = () => {
 				e.preventDefault()
 				router.push('/chat')
 			}
-			// if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-			// 	e.preventDefault()
-			// 	const searchInput = document.querySelector(
-			// 		'input[placeholder="Search your threads..."]'
-			// 	) as HTMLInputElement
-			// 	if (searchInput) {
-			// 		searchInput.focus()
-			// 	}
-			// }
+			if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault()
+				const searchInput = document.querySelector(
+					'input[placeholder="Search your threads..."]'
+				) as HTMLInputElement
+				if (searchInput) {
+					searchInput.focus()
+				}
+			}
 		}
 
 		document.addEventListener('keydown', down)
@@ -51,7 +51,7 @@ export const SideHeader = () => {
 						</a>
 					</Button>
 					<Button
-						variant="glass"
+						variant="ghost"
 						size="icon"
 						className="size-8"
 						onClick={() => {
