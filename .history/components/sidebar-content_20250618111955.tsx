@@ -251,7 +251,7 @@ export const SideContent = () => {
 											<div className="flex items-center gap-2 min-w-0 flex-1">
 												<div className="rounded-md bg-primary p-1.5">
 													<MessageSquare
-														className="size-4 text-white dark:text-white"
+														className="size-8 fill-sidebar-foreground dark:text-white"
 														animateOnHover
 													/>
 												</div>

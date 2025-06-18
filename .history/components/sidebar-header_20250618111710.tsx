@@ -92,7 +92,7 @@ export const SideHeader = () => {
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-						<Kbd className=" h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 dark:!bg-white/10 ">
+						<Kbd className="bg-primary h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 dark:!bg-white/10 !text-white">
 							<KbdKey aria-label="Meta">⌘</KbdKey>
 							<KbdKey>K</KbdKey>
 						</Kbd>

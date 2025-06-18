@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router'
+import { useRouter } from 'next/navigation'
 import {
 	SidebarHeader,
 	SidebarInput,
@@ -15,15 +15,15 @@ import { useThreadSearch } from '@/contexts/thread-search-context'
 import { Link } from 'react-router'
 
 export const SideHeader = () => {
-	const navigate = useNavigate()
+	const router = useRouter()
 	const { searchQuery, setSearchQuery } = useThreadSearch()
 	const searchInputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
-			if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
+			if (e.key === 'o' && e.shiftKey && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault()
-				navigate('/chat')
+				router.push('/chat')
 			}
 			if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault()
@@ -33,7 +33,7 @@ export const SideHeader = () => {
 
 		document.addEventListener('keydown', down)
 		return () => document.removeEventListener('keydown', down)
-	}, [navigate])
+	}, [router])
 
 	return (
 		<SidebarHeader className="p-4 space-y-4 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:space-y-2">
@@ -78,7 +78,8 @@ export const SideHeader = () => {
 						<span>New Chat</span>
 						<Kbd className="h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 !bg-white/10 !text-white">
 							<KbdKey aria-label="Meta">⌘</KbdKey>
-							<KbdKey>L</KbdKey>
+							<KbdKey>SHIFT</KbdKey>
+							<KbdKey>O</KbdKey>
 						</Kbd>
 					</Link>
 				</Button>
@@ -92,7 +93,7 @@ export const SideHeader = () => {
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-						<Kbd className=" h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 dark:!bg-white/10 ">
+						<Kbd className="h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 !bg-white/10 !text-white">
 							<KbdKey aria-label="Meta">⌘</KbdKey>
 							<KbdKey>K</KbdKey>
 						</Kbd>

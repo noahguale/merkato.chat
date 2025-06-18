@@ -105,8 +105,28 @@ const components: Options['components'] = {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	pre: ({ node, className, children }) => {
 		let language = 'javascript'
-		if (typeof node?.properties?.className === 'string') {
-			language = node.properties.className.replace('language-', '')
+		
+		// Try to extract language from className prop
+		if (typeof className === 'string') {
+			const match = className.match(/language-(\w+)/)
+			if (match) {
+				language = match[1]
+			}
+		}
+		
+		// Fallback: try to extract from code element's className
+		if (language === 'javascript' && 
+			typeof children === 'object' && 
+			children !== null && 
+			'props' in children && 
+			typeof children.props === 'object' && 
+			children.props !== null && 
+			'className' in children.props && 
+			typeof children.props.className === 'string') {
+			const match = children.props.className.match(/language-(\w+)/)
+			if (match) {
+				language = match[1]
+			}
 		}
 		const childrenIsCode =
 			typeof children === 'object' &&
@@ -116,10 +136,63 @@ const components: Options['components'] = {
 		if (!childrenIsCode) {
 			return <pre>{children}</pre>
 		}
+		// Generate appropriate filename based on language
+		const getFilename = (lang: string): string => {
+			const extensions: Record<string, string> = {
+				javascript: 'index.js',
+				typescript: 'index.ts',
+				python: 'main.py',
+				java: 'Main.java',
+				cpp: 'main.cpp',
+				c: 'main.c',
+				rust: 'main.rs',
+				go: 'main.go',
+				php: 'index.php',
+				ruby: 'main.rb',
+				swift: 'main.swift',
+				kotlin: 'Main.kt',
+				dart: 'main.dart',
+				scala: 'Main.scala',
+				shell: 'script.sh',
+				bash: 'script.sh',
+				powershell: 'script.ps1',
+				sql: 'query.sql',
+				html: 'index.html',
+				css: 'styles.css',
+				scss: 'styles.scss',
+				sass: 'styles.sass',
+				less: 'styles.less',
+				json: 'data.json',
+				xml: 'data.xml',
+				yaml: 'config.yaml',
+				yml: 'config.yml',
+				toml: 'config.toml',
+				dockerfile: 'Dockerfile',
+				makefile: 'Makefile',
+				r: 'script.R',
+				matlab: 'script.m',
+				lua: 'script.lua',
+				perl: 'script.pl',
+				haskell: 'main.hs',
+				clojure: 'main.clj',
+				elixir: 'main.ex',
+				erlang: 'main.erl',
+				fsharp: 'main.fs',
+				ocaml: 'main.ml',
+				scheme: 'main.scm',
+				lisp: 'main.lisp',
+				jsx: 'component.jsx',
+				tsx: 'component.tsx',
+				vue: 'component.vue',
+				svelte: 'component.svelte'
+			}
+			return extensions[lang.toLowerCase()] || `code.${lang}`
+		}
+
 		const data: CodeBlockProps['data'] = [
 			{
 				language,
-				filename: 'index.js',
+				filename: getFilename(language),
 				code: (children.props as { children: string }).children,
 			},
 		]
