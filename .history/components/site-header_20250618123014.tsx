@@ -8,7 +8,6 @@ import {
 	TooltipTrigger,
 } from '@/components/animate-ui/radix/tooltip'
 import { Star } from './animate-ui/icons/star-icon'
-import { AnimateIcon } from './animate-ui/icons/icon'
 
 export const SiteHeader = () => {
 	return (
@@ -20,26 +19,13 @@ export const SiteHeader = () => {
 
 				<div className="relative mx-auto flex max-w-sm items-center gap-4">
 					<div className="flex items-center gap-1 font-ibm-plex-mono">
-						<AnimateIcon animate loop>
-							<div>
-								<Star size={12} className="	" />
-							</div>
-						</AnimateIcon>
-
+						<Star className="icons-base flex-shrink-0" size={24} />
 						<span className="text-accent-blue text-sm dark:text-blue-100 whitespace-nowrap">
-							Check out blog post:
-							<span className="transition-transform duration-200 hover:translate-x-1 ml-1">
-								→
-							</span>
-							<a
-								href="https://www.guale.io/blog/merkato-chat"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="font-lora font-semibold tracking-wide hover:underline transition-all duration-200 inline-flex items-center gap-1 ml-1"
-								aria-label="Read blog post about Merkato Chat (opens in new tab)"
-							>
-								guale.io
-							</a>
+							Introducing:{' '}
+							<span className="font-lora font-semibold tracking-wide">
+								Agentic Editing
+							</span>{' '}
+							→
 						</span>
 					</div>
 				</div>

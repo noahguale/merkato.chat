@@ -28,9 +28,6 @@ export const SiteHeader = () => {
 
 						<span className="text-accent-blue text-sm dark:text-blue-100 whitespace-nowrap">
 							Check out blog post:
-							<span className="transition-transform duration-200 hover:translate-x-1 ml-1">
-								→
-							</span>
 							<a
 								href="https://www.guale.io/blog/merkato-chat"
 								target="_blank"
@@ -40,6 +37,9 @@ export const SiteHeader = () => {
 							>
 								guale.io
 							</a>
+							<span className="transition-transform duration-200 hover:translate-x-1">
+								→
+							</span>
 						</span>
 					</div>
 				</div>

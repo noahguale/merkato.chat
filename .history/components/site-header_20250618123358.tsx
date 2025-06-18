@@ -28,17 +28,17 @@ export const SiteHeader = () => {
 
 						<span className="text-accent-blue text-sm dark:text-blue-100 whitespace-nowrap">
 							Check out blog post:
-							<span className="transition-transform duration-200 hover:translate-x-1 ml-1">
-								→
-							</span>
 							<a
 								href="https://www.guale.io/blog/merkato-chat"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="font-lora font-semibold tracking-wide hover:underline transition-all duration-200 inline-flex items-center gap-1 ml-1"
+								className="font-lora font-semibold tracking-wide hover:underline transition-all duration-200 inline-flex items-center gap-1"
 								aria-label="Read blog post about Merkato Chat (opens in new tab)"
 							>
 								guale.io
+								<span className="transition-transform duration-200 hover:translate-x-1">
+									→
+								</span>
 							</a>
 						</span>
 					</div>

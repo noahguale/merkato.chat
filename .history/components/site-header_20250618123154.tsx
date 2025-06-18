@@ -22,24 +22,16 @@ export const SiteHeader = () => {
 					<div className="flex items-center gap-1 font-ibm-plex-mono">
 						<AnimateIcon animate loop>
 							<div>
-								<Star size={12} className="	" />
+								<Star size={20} className="	" />
 							</div>
 						</AnimateIcon>
 
 						<span className="text-accent-blue text-sm dark:text-blue-100 whitespace-nowrap">
-							Check out blog post:
-							<span className="transition-transform duration-200 hover:translate-x-1 ml-1">
-								→
-							</span>
-							<a
-								href="https://www.guale.io/blog/merkato-chat"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="font-lora font-semibold tracking-wide hover:underline transition-all duration-200 inline-flex items-center gap-1 ml-1"
-								aria-label="Read blog post about Merkato Chat (opens in new tab)"
-							>
-								guale.io
-							</a>
+							Blog Post:{' '}
+							<span className="font-lora font-semibold tracking-wide">
+								Agentic Editing
+							</span>{' '}
+							→
 						</span>
 					</div>
 				</div>
