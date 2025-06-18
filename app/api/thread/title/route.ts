@@ -1,4 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
+import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { generateText } from 'ai'
 import { NextRequest, NextResponse } from 'next/server'
 import { ConvexHttpClient } from 'convex/browser'
@@ -30,15 +31,29 @@ export async function POST(req: NextRequest) {
 
 		convex.setAuth(token)
 
-		const providerConfig = await convex.query(
+		let providerConfig = await convex.query(
 			api.providerConfig.getProviderConfig,
 			{ provider: 'google' }
 		)
+		
+		// Fallback to OpenRouter if Google not available
+		let usingOpenRouterFallback = false
+		if (!providerConfig) {
+			const openrouterConfig = await convex.query(
+				api.providerConfig.getProviderConfig,
+				{ provider: 'openrouter' }
+			)
+			if (openrouterConfig) {
+				providerConfig = openrouterConfig
+				usingOpenRouterFallback = true
+			}
+		}
+		
 		if (!providerConfig) {
 			return NextResponse.json(
 				{
 					error:
-						'No Google API key configured. Please add your Google API key in settings.',
+						'No Google API key or OpenRouter API key configured. Please add an API key in settings.',
 				},
 				{ status: 400 }
 			)
@@ -59,8 +74,15 @@ export async function POST(req: NextRequest) {
 		}
 
 		try {
-			const googleProvider = createGoogleGenerativeAI({ apiKey })
-			const aiModel = googleProvider('gemini-1.5-flash')
+			let aiModel
+			if (usingOpenRouterFallback) {
+				// Use OpenRouter with a fast model for title generation
+				const openrouterProvider = createOpenRouter({ apiKey })
+				aiModel = openrouterProvider('google/gemini-2.5-flash')
+			} else {
+				const googleProvider = createGoogleGenerativeAI({ apiKey })
+				aiModel = googleProvider('gemini-1.5-flash')
+			}
 
 			const result = await generateText({
 				model: aiModel,
@@ -75,7 +97,7 @@ export async function POST(req: NextRequest) {
 		} catch (error) {
 			console.error('[AI_CALL_ERROR]: ', error)
 			return NextResponse.json(
-				{ error: 'Failed to generate title' },
+				{ error: `Failed to generate title${usingOpenRouterFallback ? ' (using OpenRouter fallback)' : ''}` },
 				{ status: 500 }
 			)
 		}

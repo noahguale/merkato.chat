@@ -83,6 +83,31 @@ export const MODEL_CONFIGS: Record<Model, ModelConfig> = {
 	},
 }
 
+// OpenRouter model ID mappings for when using OpenRouter as fallback
+export const OPENROUTER_MODEL_MAPPING: Record<string, string> = {
+	// Google models
+	'gemini-2.5-pro': 'google/gemini-2.5-pro',
+	'gemini-2.5-flash-preview-05-20': 'google/gemini-2.5-flash',
+	
+	// OpenAI models
+	'gpt-4o': 'openai/gpt-4o',
+	'gpt-4o-mini': 'openai/gpt-4o-mini',
+	
+	// Anthropic models - using more commonly available versions
+	'claude-sonnet-4-20250514': 'anthropic/claude-sonnet-4',
+	'claude-3-5-sonnet-20241022': 'anthropic/claude-3.5-sonnet',
+	'claude-3-7-sonnet-20250219': 'anthropic/claude-3.5-sonnet', // Fallback to 3.5 if 3.7 not available
+	
+	// OpenRouter models (no mapping needed)
+	'deepseek/deepseek-r1-0528:free': 'deepseek/deepseek-r1-0528:free',
+	'deepseek/deepseek-chat-v3-0324:free': 'deepseek/deepseek-chat-v3-0324:free',
+}
+
+// Get OpenRouter model ID for fallback
+export function getOpenRouterModelId(originalModelId: string): string {
+	return OPENROUTER_MODEL_MAPPING[originalModelId] || originalModelId
+}
+
 export type Model = (typeof models)[number]
 export type ModelConfig = {
 	id: string

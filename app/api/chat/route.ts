@@ -9,6 +9,7 @@ import { ConvexHttpClient } from 'convex/browser'
 import { decryptApiKey } from '@/lib/encryption'
 import { convexAuthNextjsToken } from '@convex-dev/auth/nextjs/server'
 import { api } from '@/convex/_generated/api'
+import { getOpenRouterModelId } from '@/lib/types'
 
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
@@ -49,16 +50,32 @@ export async function POST(req: NextRequest) {
 		}
 
 		convex.setAuth(token)
-		const providerConfig = await convex.query(
+		let providerConfig = await convex.query(
 			api.providerConfig.getProviderConfig,
 			{
 				provider,
 			}
 		)
+		
+		// Fallback to OpenRouter if primary provider not available
+		let usingOpenRouterFallback = false
+		if (!providerConfig && provider !== 'openrouter') {
+			const openrouterConfig = await convex.query(
+				api.providerConfig.getProviderConfig,
+				{
+					provider: 'openrouter',
+				}
+			)
+			if (openrouterConfig) {
+				providerConfig = openrouterConfig
+				usingOpenRouterFallback = true
+			}
+		}
+		
 		if (!providerConfig) {
 			return NextResponse.json(
 				{
-					error: `No API key configured for ${provider}. Please add your ${provider} API key in settings.`,
+					error: `No API key configured for ${provider}. Please add your ${provider} API key or OpenRouter API key in settings.`,
 				},
 				{ status: 400 }
 			)
@@ -77,59 +94,55 @@ export async function POST(req: NextRequest) {
 		// 	)
 		// }
 		let apiKey: string
-		const cacheKey = `${token}_${provider}`
+		const actualProvider = usingOpenRouterFallback ? 'openrouter' : provider
+		const cacheKey = `${token}_${actualProvider}`
 		const cached = providerCache.get(cacheKey)
 
 		if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
 			apiKey = cached.apiKey
 		} else {
-			const providerConfig = await convex.query(
-				api.providerConfig.getProviderConfig,
-				{ provider }
-			)
-
-			if (!providerConfig) {
-				return NextResponse.json(
-					{ error: `No API key configured for ${provider}` },
-					{ status: 400 }
-				)
-			}
-
 			apiKey = await decryptApiKey(providerConfig.encryptedApiKey)
 			providerCache.set(cacheKey, { apiKey, timestamp: Date.now() })
 		}
 		let aiModel
 		try {
-			switch (provider) {
-				case 'openai':
-					const openaiProvider = createOpenAI({ apiKey })
-					aiModel = openaiProvider(model)
-					break
-				case 'google':
-					const googleProvider = createGoogleGenerativeAI({ apiKey })
-					aiModel = googleProvider(model, { useSearchGrounding: true })
-					break
-				case 'anthropic':
-					const anthropicProvider = createAnthropic({ apiKey })
-					aiModel = anthropicProvider(model)
-					break
-				case 'openrouter':
-					const openrouterProvider = createOpenRouter({ apiKey })
-					aiModel = openrouterProvider(model)
-					break
-				default:
-					return NextResponse.json(
-						{
-							error: `[ERROR]: Unsupported provider: ${provider}. Supported providers: openai, google, anthropic, openrouter`,
-						},
-						{ status: 400 }
-					)
+			if (usingOpenRouterFallback) {
+				// Use OpenRouter as proxy for any model with correct model ID mapping
+				const openrouterProvider = createOpenRouter({ apiKey })
+				const openrouterModelId = getOpenRouterModelId(model)
+				aiModel = openrouterProvider(openrouterModelId)
+			} else {
+				switch (provider) {
+					case 'openai':
+						const openaiProvider = createOpenAI({ apiKey })
+						aiModel = openaiProvider(model)
+						break
+					case 'google':
+						const googleProvider = createGoogleGenerativeAI({ apiKey })
+						aiModel = googleProvider(model, { useSearchGrounding: true })
+						break
+					case 'anthropic':
+						const anthropicProvider = createAnthropic({ apiKey })
+						aiModel = anthropicProvider(model)
+						break
+					case 'openrouter':
+						const openrouterProvider = createOpenRouter({ apiKey })
+						aiModel = openrouterProvider(model)
+						break
+					default:
+						return NextResponse.json(
+							{
+								error: `[ERROR]: Unsupported provider: ${provider}. Supported providers: openai, google, anthropic, openrouter`,
+							},
+							{ status: 400 }
+						)
+				}
 			}
 		} catch (error) {
 			console.error('[INIT_ERROR]: ', error)
 			return NextResponse.json(
 				{
-					error: `[ERROR]: Failed to initialize ${provider} provider. Please check your API key.`,
+					error: `[ERROR]: Failed to initialize ${usingOpenRouterFallback ? 'OpenRouter (fallback)' : provider} provider. Please check your API key.`,
 				},
 				{ status: 500 }
 			)
