@@ -25,7 +25,7 @@ export default function Sign() {
 				</div>
 				<main className="mx-auto my-auto flex-col flex ">
 					<h2 className="text-muted-foreground font-semibold text-balance tracking-tight mb-4 text-center w-full">
-						Sign in with your account
+						Sign in with your Google or GitHub account
 					</h2>
 					<div className="flex flex-col gap-2">
 						<SignInWithGitHub />
@@ -36,7 +36,7 @@ export default function Sign() {
 								}
 							>
 								<span className="relative z-10 bg-background px-2 text-muted-foreground">
-									Or
+									Or continue with
 								</span>
 							</div>
 						</div>

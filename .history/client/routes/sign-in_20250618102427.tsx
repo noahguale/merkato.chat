@@ -25,7 +25,7 @@ export default function Sign() {
 				</div>
 				<main className="mx-auto my-auto flex-col flex ">
 					<h2 className="text-muted-foreground font-semibold text-balance tracking-tight mb-4 text-center w-full">
-						Sign in with your account
+						Sign in with your Google or GitHub account
 					</h2>
 					<div className="flex flex-col gap-2">
 						<SignInWithGitHub />
