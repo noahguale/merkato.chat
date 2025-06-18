@@ -23,10 +23,11 @@ export default function Sign() {
 						<span className="text-primary">.chat</span>
 					</div>
 				</div>
-				<main className="mx-auto my-auto flex-col flex ">
-					<h2 className="text-muted-foreground font-semibold text-balance tracking-tight mb-4 text-center w-full">
-						Sign in with your Google account
+				<main className="mx-auto my-auto flex-col flex">
+					<h2 className="font-semibold text-2xl tracking-tight mb-4">
+						Sign in or create an account
 					</h2>
+					<SignInWithGitHub />
 					<SignInWithGoogle />
 				</main>
 			</div>

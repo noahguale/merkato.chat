@@ -2,7 +2,7 @@
 
 import { BotMessageSquare } from '@/components/animate-ui/icons/bot-message-square'
 import { AnimateIcon } from '@/components/animate-ui/icons/icon'
-import { SignInWithGitHub, SignInWithGoogle } from '@/components/sign-in'
+import { SignInWithGitHub } from '@/components/sign-in'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router'
 
@@ -23,10 +23,11 @@ export default function Sign() {
 						<span className="text-primary">.chat</span>
 					</div>
 				</div>
-				<main className="mx-auto my-auto flex-col flex ">
-					<h2 className="text-muted-foreground font-semibold text-balance tracking-tight mb-4 text-center w-full">
-						Sign in with your Google account
+				<main className="mx-auto my-auto flex-col flex">
+					<h2 className="font-semibold text-2xl tracking-tight mb-4">
+						Sign in or create an account
 					</h2>
+					<SignInWithGitHub />
 					<SignInWithGoogle />
 				</main>
 			</div>

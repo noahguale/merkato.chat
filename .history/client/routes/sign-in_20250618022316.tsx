@@ -24,8 +24,8 @@ export default function Sign() {
 					</div>
 				</div>
 				<main className="mx-auto my-auto flex-col flex ">
-					<h2 className="text-muted-foreground font-semibold text-balance tracking-tight mb-4 text-center w-full">
-						Sign in with your Google account
+					<h2 className="font-semibold text-2xl tracking-tight mb-4 text-center">
+						Sign in or create an account
 					</h2>
 					<SignInWithGoogle />
 				</main>

@@ -23,11 +23,11 @@ export function SignInWithGoogle() {
 	return (
 		<Button
 			className="flex-1"
+			variant="outline"
 			type="button"
 			onClick={() => void signIn('google', { redirectTo: '/' })}
-			variant="blue"
 		>
-			<Google className="mr-2 h-4 w-4" fill="white" /> Google
+			<Google className="mr-2 h-4 w-4" /> Google
 		</Button>
 	)
 }
