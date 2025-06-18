@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
 	SidebarHeader,
@@ -11,12 +11,9 @@ import { Button } from './ui/button'
 import { Kbd, KbdKey } from './ui/kdb'
 import { MessageSquarePlus } from './animate-ui/icons/message-square-plus'
 import { Search } from './animate-ui/icons/search'
-import { useThreadSearch } from '@/contexts/thread-search-context'
 
 export const SideHeader = () => {
 	const router = useRouter()
-	const { searchQuery, setSearchQuery } = useThreadSearch()
-	const searchInputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -24,10 +21,15 @@ export const SideHeader = () => {
 				e.preventDefault()
 				router.push('/chat')
 			}
-			if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-				e.preventDefault()
-				searchInputRef.current?.focus()
-			}
+			// if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+			// 	e.preventDefault()
+			// 	const searchInput = document.querySelector(
+			// 		'input[placeholder="Search your threads..."]'
+			// 	) as HTMLInputElement
+			// 	if (searchInput) {
+			// 		searchInput.focus()
+			// 	}
+			// }
 		}
 
 		document.addEventListener('keydown', down)
@@ -50,7 +52,14 @@ export const SideHeader = () => {
 						variant="glass"
 						size="icon"
 						className="size-8"
-						onClick={() => searchInputRef.current?.focus()}
+						onClick={() => {
+							const searchInput = document.querySelector(
+								'input[placeholder="Search your threads..."]'
+							) as HTMLInputElement
+							if (searchInput) {
+								searchInput.focus()
+							}
+						}}
 					>
 						<Search className="size-5" animateOnHover />
 						<span className="sr-only">Search</span>
@@ -84,11 +93,8 @@ export const SideHeader = () => {
 				<div className="relative">
 					<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-primary" />
 					<SidebarInput
-						ref={searchInputRef}
 						placeholder="Search your threads..."
 						className="pl-10 pr-16 bg-transparent placeholder:text-xs"
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
 						<Kbd className="h-5 max-w-max rounded-xs px-1.5 flex items-center gap-0.5 text-[.6875rem] font-bold  dark:text-gray-300 dark:border-offgray-400/10 border  dark:bg-cream-900/10   sm:flex !border-white/20 !bg-white/10 !text-white">

@@ -133,7 +133,7 @@ export function ProviderConfigForm() {
 						<FormItem>
 							<FormLabel>API Key</FormLabel>
 							<FormControl>
-								<Input type="text" placeholder={placeholder} {...field} />
+								<Input type="password" placeholder={placeholder} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

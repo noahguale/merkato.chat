@@ -6,15 +6,17 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { SidebarContent, useSidebar } from './animate-ui/radix/sidebar'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Pin } from './animate-ui/icons/pin'
 import { PinOff } from './animate-ui/icons/pin-off'
 import { MessageSquare } from './animate-ui/icons/message-square'
 import { Trash } from './animate-ui/icons/trash'
 import { ThreadMenu } from './thread-menu'
+import { useThreadSearch } from '@/contexts/thread-search-context'
 
 export const SideContent = () => {
 	const { state } = useSidebar()
+	const { searchQuery } = useThreadSearch()
 	const threads = useQuery(api.chat.getThreads)
 	const pinnedThreads = useQuery(api.chat.getPinnedThreads)
 	const togglePin = useMutation(api.chat.toggleThreadPin)
@@ -23,6 +25,23 @@ export const SideContent = () => {
 	const [togglingGroup, setTogglingGroup] = useState<
 		'pinned' | 'unpinned' | null
 	>(null)
+
+	// Filter threads based on search query
+	const filteredThreads = useMemo(() => {
+		if (!threads || !searchQuery.trim()) return threads || []
+		
+		return threads.filter((thread) =>
+			(thread.title || 'New Chat').toLowerCase().includes(searchQuery.toLowerCase())
+		)
+	}, [threads, searchQuery])
+
+	const filteredPinnedThreads = useMemo(() => {
+		if (!pinnedThreads || !searchQuery.trim()) return pinnedThreads || []
+		
+		return pinnedThreads.filter((thread) =>
+			(thread.title || 'New Chat').toLowerCase().includes(searchQuery.toLowerCase())
+		)
+	}, [pinnedThreads, searchQuery])
 
 	const handleTogglePin = async (
 		threadId: Id<'threads'>,
@@ -94,7 +113,7 @@ export const SideContent = () => {
 		type: 'spring' as const,
 	}
 
-	const threadGroups = getThreadsByTimeGroup(threads || [])
+	const threadGroups = getThreadsByTimeGroup(filteredThreads)
 
 	const renderThreadGroup = (groupThreads: any[], groupName: string) => {
 		if (groupThreads.length === 0) return null
@@ -188,7 +207,7 @@ export const SideContent = () => {
 					{/* Pinned Threads Section */}
 					<div>
 						<AnimatePresence>
-							{pinnedThreads && pinnedThreads.length > 0 && (
+							{filteredPinnedThreads && filteredPinnedThreads.length > 0 && (
 								<motion.p
 									layout
 									key="pinned-label"
@@ -203,14 +222,14 @@ export const SideContent = () => {
 								</motion.p>
 							)}
 						</AnimatePresence>
-						{pinnedThreads && pinnedThreads.length > 0 && (
+						{filteredPinnedThreads && filteredPinnedThreads.length > 0 && (
 							<div
 								className={cn(
 									'space-y-2 relative',
 									togglingGroup === 'pinned' ? 'z-5' : 'z-10'
 								)}
 							>
-								{pinnedThreads.map((thread) => (
+								{filteredPinnedThreads.map((thread) => (
 									<motion.div
 										key={thread.id}
 										layoutId={`thread-${thread.id}`}
@@ -286,6 +305,15 @@ export const SideContent = () => {
 						<div className="px-3 py-6 text-center">
 							<div className="text-sm text-sidebar-foreground/60">
 								No chats yet. Start a new conversation!
+							</div>
+						</div>
+					)}
+
+					{/* No search results message */}
+					{searchQuery.trim() && filteredThreads.length === 0 && filteredPinnedThreads.length === 0 && threads && threads.length > 0 && (
+						<div className="px-3 py-6 text-center">
+							<div className="text-sm text-sidebar-foreground/60">
+								No threads found for "{searchQuery}"
 							</div>
 						</div>
 					)}
