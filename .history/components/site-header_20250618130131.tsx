@@ -22,7 +22,7 @@ export const SiteHeader = () => {
 				<div className="hidden">
 					<GlobalThreadMenu />
 				</div>
-
+				{/* 
 				{isMobile && (
 					<div className="flex md:hidden">
 						<Tooltip>
@@ -34,7 +34,7 @@ export const SiteHeader = () => {
 							</TooltipContent>
 						</Tooltip>
 					</div>
-				)}
+				)} */}
 
 				<div className="relative mx-auto flex max-w-sm items-center gap-4">
 					<div className="flex items-center gap-1 font-ibm-plex-mono">

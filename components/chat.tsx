@@ -15,6 +15,7 @@ import {
 	AIConversationContent,
 	AIConversationScrollButton,
 } from './ui/ai/conversation'
+import { toast } from 'sonner'
 
 interface ChatProps {
 	threadId: string | null
@@ -40,9 +41,39 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		input,
 		handleInputChange,
 		handleSubmit,
+		error,
+		isLoading,
 		// experimental_resume,
 	} = useChat({
 		initialMessages,
+		onError: (error) => {
+			console.error('[CHAT_ERROR]:', error)
+			
+			// Extract error message from different error types
+			let errorMessage = 'Failed to send message. Please try again.'
+			
+			if (error.message) {
+				// Handle specific API errors
+				if (error.message.includes('No API key configured')) {
+					errorMessage = 'API key not configured. Please add your API key in settings.'
+				} else if (error.message.includes('Payment Required') || error.message.includes('credits')) {
+					errorMessage = 'Insufficient credits. Please check your API provider account.'
+				} else if (error.message.includes('Rate limit')) {
+					errorMessage = 'Rate limit exceeded. Please wait a moment and try again.'
+				} else if (error.message.includes('Invalid API key')) {
+					errorMessage = 'Invalid API key. Please check your API key in settings.'
+				} else if (error.message.includes('Unauthorized')) {
+					errorMessage = 'Authentication failed. Please check your API key.'
+				} else if (error.message.includes('model')) {
+					errorMessage = 'Model not available. Please try a different model.'
+				} else {
+					// Use the actual error message if it's descriptive
+					errorMessage = error.message
+				}
+			}
+			
+			toast.error(errorMessage)
+		},
 		onFinish: async (message) => {
 			if (!currentModel) return
 

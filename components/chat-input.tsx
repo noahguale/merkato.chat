@@ -20,6 +20,12 @@ import { Model, models } from '@/lib/types'
 import { ChangeEvent, KeyboardEvent } from 'react'
 import { toast } from 'sonner'
 import { Attachment } from 'ai'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/components/animate-ui/radix/tooltip'
 
 interface ChatInputProps {
 	threadId?: string | null
@@ -101,7 +107,7 @@ export const ChatInput = ({
 	// }
 
 	return (
-		<>
+		<TooltipProvider>
 			{/* Hidden file input */}
 			<input
 				type="file"
@@ -127,19 +133,49 @@ export const ChatInput = ({
 
 				<AIInputToolbar>
 					<AIInputTools>
-						<AIInputButton
-							onClick={() => fileInputRef.current?.click()}
-							type="button"
-						>
-							<PlusIcon size={16} />
-						</AIInputButton>
-						<AIInputButton>
-							<MicIcon size={16} />
-						</AIInputButton>
-						<AIInputButton>
-							<GlobeIcon size={16} />
-							<span>Search</span>
-						</AIInputButton>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<AIInputButton
+									type="button"
+									disabled
+									className="opacity-50 cursor-not-allowed"
+								>
+									<PlusIcon size={16} />
+								</AIInputButton>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>File upload broke last minute</p>
+							</TooltipContent>
+						</Tooltip>
+						
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<AIInputButton
+									disabled
+									className="opacity-50 cursor-not-allowed"
+								>
+									<MicIcon size={16} />
+								</AIInputButton>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Future updates will have this feature</p>
+							</TooltipContent>
+						</Tooltip>
+						
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<AIInputButton
+									disabled
+									className="opacity-50 cursor-not-allowed"
+								>
+									<GlobeIcon size={16} />
+									<span>Search</span>
+								</AIInputButton>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Future updates will have this feature</p>
+							</TooltipContent>
+						</Tooltip>
 
 						<AIInputModelSelect
 							value={currentModel}
@@ -163,6 +199,6 @@ export const ChatInput = ({
 					</AIInputSubmit>
 				</AIInputToolbar>
 			</AIInput>
-		</>
+		</TooltipProvider>
 	)
 }
