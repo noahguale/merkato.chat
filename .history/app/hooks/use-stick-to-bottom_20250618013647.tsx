@@ -593,8 +593,10 @@ export const useStickToBottom = (
 }
 
 export interface StickToBottomInstance {
-	contentRef: MutableRefObject<HTMLElement | null> & RefCallback<HTMLElement>
-	scrollRef: MutableRefObject<HTMLElement | null> & RefCallback<HTMLElement>
+	contentRef: React.MutableRefObject<HTMLElement | null> &
+		React.RefCallback<HTMLElement>
+	scrollRef: React.MutableRefObject<HTMLElement | null> &
+		React.RefCallback<HTMLElement>
 	scrollToBottom: ScrollToBottom
 	stopScroll: StopScroll
 	isAtBottom: boolean
@@ -603,14 +605,18 @@ export interface StickToBottomInstance {
 	state: StickToBottomState
 }
 
-function useRefCallback(
-	callback: (ref: HTMLElement | null) => void,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function useRefCallback<T extends (ref: HTMLElement | null) => any>(
+	callback: T,
 	deps: DependencyList
 ) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result = useCallback((ref: HTMLElement | null) => {
 		result.current = ref
-		callback(ref)
-	}, deps) as MutableRefObject<HTMLElement | null> & RefCallback<HTMLElement>
+		return callback(ref)
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	}, deps) as any as MutableRefObject<HTMLElement | null> &
+		RefCallback<HTMLElement>
 
 	return result
 }

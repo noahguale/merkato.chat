@@ -593,8 +593,10 @@ export const useStickToBottom = (
 }
 
 export interface StickToBottomInstance {
-	contentRef: MutableRefObject<HTMLElement | null> & RefCallback<HTMLElement>
-	scrollRef: MutableRefObject<HTMLElement | null> & RefCallback<HTMLElement>
+	contentRef: React.MutableRefObject<HTMLElement | null> &
+		React.RefCallback<HTMLElement>
+	scrollRef: React.MutableRefObject<HTMLElement | null> &
+		React.RefCallback<HTMLElement>
 	scrollToBottom: ScrollToBottom
 	stopScroll: StopScroll
 	isAtBottom: boolean

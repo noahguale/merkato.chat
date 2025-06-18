@@ -1,7 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { SVGMotionProps, useAnimation, type Variants } from 'motion/react'
+import {
+	SVGMotionProps,
+	useAnimation,
+	type AnimationControls,
+	type Variants,
+} from 'motion/react'
 
 import { cn } from '@/lib/utils'
 
@@ -36,8 +41,7 @@ type StaticAnimations = keyof typeof staticAnimations
 type TriggerProp<T = string> = boolean | StaticAnimations | T
 
 interface AnimateIconContextValue {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	controls: any | undefined
+	controls: AnimationControls | undefined
 	animation: StaticAnimations | string
 	loop: boolean
 	loopDelay: number
