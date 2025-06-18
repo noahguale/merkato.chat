@@ -6,8 +6,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuGroup,
 	DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+} from '@radix-ui/react-dropdown-menu'
+import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
 import { ChevronsUpDown } from 'lucide-react'
 import { Sparkles, BadgeCheck, CreditCard, Bell } from 'lucide-react'
 import { useQuery } from 'convex/react'
@@ -21,7 +21,6 @@ import {
 
 import { SignOut } from './sign-out'
 import { api } from '@/convex/_generated/api'
-import { LogOut } from './animate-ui/icons/log-out'
 
 interface SideFooterProps {
 	isMobile: boolean
@@ -113,29 +112,28 @@ export const SideFooter = ({ isMobile }: SideFooterProps) => {
 							</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<Sparkles />
 									Upgrade to Pro
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<BadgeCheck />
 									Account
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<CreditCard />
 									Billing
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<Bell />
 									Notifications
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<LogOut animateOnHover />
 								<SignOut />
 							</DropdownMenuItem>
 						</DropdownMenuContent>

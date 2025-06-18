@@ -113,22 +113,22 @@ export const SideFooter = ({ isMobile }: SideFooterProps) => {
 							</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<Sparkles />
 									Upgrade to Pro
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<BadgeCheck />
 									Account
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<CreditCard />
 									Billing
 								</DropdownMenuItem>
-								<DropdownMenuItem disabled className="cursor-not-allowed">
+								<DropdownMenuItem>
 									<Bell />
 									Notifications
 								</DropdownMenuItem>

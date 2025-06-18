@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router'
 import { Id } from '@/convex/_generated/dataModel'
 import { ChatMessage } from './chat-message'
 import { ChatInput } from './chat-input'
+import { Welcome } from './welcome'
 import { useThreadTitle } from '@/app/hooks/use-thread-title'
 import {
 	AIConversation,
@@ -94,13 +95,14 @@ export const Chat = ({ threadId, initialMessages }: ChatProps) => {
 		<main className="flex flex-col w-full max-w-4xl pt-10 mx-auto size-full  ">
 			<AIConversation className="flex justify-center items-start min-h-full px-4">
 				<AIConversationContent>
-					<ChatMessage messages={messages} />
+					{messages.length === 0 ? (
+						<Welcome />
+					) : (
+						<ChatMessage messages={messages} />
+					)}
 				</AIConversationContent>
 				<AIConversationScrollButton />
 			</AIConversation>
-			{/* <div className="flex justify-center items-start min-h-full px-4">
-				<ChatMessage messages={messages} />
-			</div> */}
 			<div className="w-full px-4 pb-4 sticky bottom-0">
 				<ChatInput
 					input={input}

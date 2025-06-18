@@ -2,10 +2,9 @@
 
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { Bot } from 'lucide-react'
 import { AnimateIcon } from './animate-ui/icons/icon'
 import { BotMessageSquare } from './animate-ui/icons/bot-message-square'
-import { TypingAnimation } from './type'
-import { ProviderConfigForm } from './forms/provider-config-form'
 
 export const Welcome = () => {
 	const user = useQuery(api.users.getCurrentUser)
@@ -16,17 +15,16 @@ export const Welcome = () => {
 
 	return (
 		<div className="flex h-max flex-col items-start justify-center gap-2">
-			<div className="flex items-center gap-x-6">
-				<AnimateIcon animate loop loopDelay={2}>
+			<div className="flex items-center gap-2">
+				<AnimateIcon animate loop loopDelay={1000}>
 					<div>
-						<BotMessageSquare size={40} className="text-primary" />
+						<BotMessageSquare size={40} />
 					</div>
 				</AnimateIcon>
-				<TypingAnimation className="text-3xl font-bold leading-[5rem] tracking-[-0.02em]">
-					{`How can I help you, ${user.name.split(' ')[0]}?`}
-				</TypingAnimation>
+				<h1 className="font-geist font-bold text-3xl  text-center max-w-xl">
+					How can I help you, {user.name}?
+				</h1>
 			</div>
-			<ProviderConfigForm />
 		</div>
 	)
 }

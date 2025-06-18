@@ -5,7 +5,6 @@ import { api } from '@/convex/_generated/api'
 import { AnimateIcon } from './animate-ui/icons/icon'
 import { BotMessageSquare } from './animate-ui/icons/bot-message-square'
 import { TypingAnimation } from './type'
-import { ProviderConfigForm } from './forms/provider-config-form'
 
 export const Welcome = () => {
 	const user = useQuery(api.users.getCurrentUser)
@@ -26,7 +25,6 @@ export const Welcome = () => {
 					{`How can I help you, ${user.name.split(' ')[0]}?`}
 				</TypingAnimation>
 			</div>
-			<ProviderConfigForm />
 		</div>
 	)
 }
