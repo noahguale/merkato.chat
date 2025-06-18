@@ -24,7 +24,7 @@ export function SignInWithGoogle() {
 		<Button
 			className="flex-1"
 			type="button"
-			onClick={() => void signIn('google', { redirectTo: '/' })}
+			onClick={() => void signIn('google', { redirectTo: '/chat' })}
 			variant="blue"
 		>
 			<Google className="mr-2 h-4 w-4" fill="white" /> Google
