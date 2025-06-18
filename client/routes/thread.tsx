@@ -21,7 +21,7 @@ export default function Thread() {
 		threadId ? { threadId: threadId as Id<'threads'> } : 'skip'
 	)
 
-	if (!hasHydrated) {
+	if (!hasHydrated || isLoading) {
 		return <div>Loading...</div>
 	}
 

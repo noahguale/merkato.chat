@@ -9,7 +9,7 @@ export default function Home() {
 	const providers = useQuery(api.providerConfig.getUserProviders)
 	const hasHydrated = useModelStore.persist?.hasHydrated()
 
-	if (!hasHydrated) {
+	if (!hasHydrated || isLoading) {
 		return <div>Loading...</div>
 	}
 
