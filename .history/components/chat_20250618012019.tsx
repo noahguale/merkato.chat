@@ -1,7 +1,6 @@
 import { api } from '@/convex/_generated/api'
 import { useModelStore } from '@/store/model-store'
-import { Message, useChat } from '@ai-sdk/react'
-import { Attachment } from 'ai'
+import { Message, useChat, Attachment } from '@ai-sdk/react'
 import { useMutation, useQuery } from 'convex/react'
 import { useNavigate } from 'react-router'
 import { Id } from '@/convex/_generated/dataModel'

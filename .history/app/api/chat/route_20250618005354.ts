@@ -23,6 +23,8 @@ const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 
 export async function POST(req: NextRequest) {
 	try {
+		console.timeEnd('Setup Time')
+		console.time('Message Processing Time')
 		const {
 			messages,
 			provider,
@@ -32,6 +34,8 @@ export async function POST(req: NextRequest) {
 			provider: string
 			model: string
 		} = await req.json()
+		console.timeEnd('Message Processing Time')
+		console.time('Provider Check Time')
 		if (!provider || !model) {
 			return NextResponse.json(
 				{
@@ -40,6 +44,8 @@ export async function POST(req: NextRequest) {
 				{ status: 400 }
 			)
 		}
+		console.timeEnd('Provider Check Time')
+		console.time('Token Check Time')
 		const token = await convexAuthNextjsToken()
 		if (!token) {
 			return NextResponse.json(
@@ -47,7 +53,9 @@ export async function POST(req: NextRequest) {
 				{ status: 401 }
 			)
 		}
+		console.timeEnd('Token Check Time')
 		convex.setAuth(token)
+		console.timeEnd('Token Check Time')
 		const providerConfig = await convex.query(
 			api.providerConfig.getProviderConfig,
 			{
@@ -62,6 +70,7 @@ export async function POST(req: NextRequest) {
 				{ status: 400 }
 			)
 		}
+		console.timeEnd('Provider Config Check Time')
 		// let apiKey: string
 		// try {
 		// 	apiKey = await decryptApiKey(providerConfig.encryptedApiKey)
@@ -75,6 +84,8 @@ export async function POST(req: NextRequest) {
 		// 		{ status: 500 }
 		// 	)
 		// }
+		console.timeEnd('Provider Config Check Time')
+		console.time('API Key Check Time')
 		let apiKey: string
 		const cacheKey = `${token}_${provider}`
 		const cached = providerCache.get(cacheKey)
@@ -97,6 +108,8 @@ export async function POST(req: NextRequest) {
 			apiKey = await decryptApiKey(providerConfig.encryptedApiKey)
 			providerCache.set(cacheKey, { apiKey, timestamp: Date.now() })
 		}
+		console.timeEnd('API Key Check Time')
+		console.time('AI Model Check Time')
 		let aiModel
 		try {
 			switch (provider) {
@@ -133,6 +146,10 @@ export async function POST(req: NextRequest) {
 				{ status: 500 }
 			)
 		}
+		console.timeEnd('AI Model Check Time')
+		console.time('Stream Text Time')
+		console.log('Using model:', model, 'provider:', provider)
+		console.log('AI Model:', aiModel)
 		try {
 			const result = streamText({
 				model: aiModel,
@@ -149,10 +166,13 @@ export async function POST(req: NextRequest) {
 					} satisfies AnthropicProviderOptions,
 				},
 			})
+			console.timeEnd('Stream Text Time')
 			return result.toDataStreamResponse({
 				sendReasoning: true,
 				sendSources: true,
 				getErrorMessage: (error: unknown) => {
+					console.log('[AI_ERROR]: ', error)
+
 					if (!(error instanceof Error)) {
 						return 'Unable to complete request. Please try again or check your API key.'
 					}
