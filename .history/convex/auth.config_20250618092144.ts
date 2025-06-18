@@ -1,3 +1,5 @@
+import Google from '@auth/core/providers/google'
+
 export default {
 	providers: [
 		{
