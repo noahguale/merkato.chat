@@ -1,0 +1,288 @@
+import { getAuthUserId } from '@convex-dev/auth/server'
+import { mutation, query } from './_generated/server'
+import { v } from 'convex/values'
+
+export const getThread = query({
+	args: { threadId: v.id('threads') },
+	handler: async (_, args) => {
+		const userId = await getAuthUserId(_)
+		if (!userId) {
+			throw new Error('Unauthorized')
+		}
+
+		const thread = await _.db.get(args.threadId)
+
+		if (!thread) {
+			return null
+		}
+
+		if (thread.userId !== userId) {
+			console.error('User attempted to access thread they do not own', {
+				userId,
+				threadId: args.threadId,
+				threadOwnerId: thread.userId,
+			})
+			return null
+		}
+
+		return thread
+	},
+})
+
+export const createMessage = mutation({
+	args: {
+		threadId: v.optional(v.id('threads')),
+		content: v.string(),
+		role: v.union(v.literal('user'), v.literal('assistant')),
+		model: v.string(),
+	},
+	handler: async (_, args) => {
+		const userId = await getAuthUserId(_)
+		if (!userId) {
+			throw new Error('Unauthorized')
+		}
+
+		let threadId = args.threadId
+
+		if (!threadId) {
+			threadId = await _.db.insert('threads', {
+				userId,
+				title: '',
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+				visibility: 'visible',
+				model: args.model,
+				pinned: false,
+				generationStatus: 'pending',
+			})
+		}
+
+		await _.db.insert('messages', {
+			userId,
+			createdAt: Date.now(),
+			model: args.model,
+			status: 'waiting',
+			threadId,
+			content: args.content,
+			role: args.role,
+			attachmentIds: [],
+		})
+
+		return threadId
+	},
+})
+
+export const getThreads = query({
+	args: {},
+	handler: async (_) => {
+		const userId = await getAuthUserId(_)
+		if (!userId) {
+			throw new Error('Unauthorized')
+		}
+
+		const threads = await _.db
+			.query('threads')
+			.withIndex('by_userId_and_updatedAt', (q) => q.eq('userId', userId))
+			.order('desc')
+			.collect()
+
+		return threads.map((thread) => ({
+			id: thread._id,
+			title: thread.title,
+			createdAt: thread.createdAt,
+			updatedAt: thread.updatedAt,
+			model: thread.model,
+			pinned: thread.pinned,
+		}))
+	},
+})
+
+export const getMessages = query({
+	args: { threadId: v.id('threads') },
+	handler: async (_, args) => {
+		const userId = await getAuthUserId(_)
+		if (!userId) {
+			throw new Error('Unauthorized')
+		}
+
+		const thread = await _.db.get(args.threadId)
+
+		if (!thread || thread.userId !== userId) {
+			return []
+		}
+
+		const messages = await _.db
+			.query('messages')
+			.withIndex('by_threadId', (q) => q.eq('threadId', args.threadId))
+			.order('asc')
+			.collect()
+
+		return messages.map((msg) => ({
+			id: msg._id,
+			content: msg.content,
+			role: msg.role,
+			createdAt: msg.createdAt,
+			status: msg.status,
+			branches: msg.branches || [],
+		}))
+	},
+})
+
+export const updateThreadTitle = mutation({
+	args: {
+		threadId: v.id('threads'),
+		title: v.string(),
+	},
+	handler: async (_, args) => {
+		const userId = await getAuthUserId(_)
+		if (!userId) throw new Error('Unauthorized')
+
+		await _.db.patch(args.threadId, { title: args.title })
+	},
+})
+
+export const toggleThreadPin = mutation({
+	args: {
+		threadId: v.id('threads'),
+	},
+	handler: async (ctx, args) => {
+		const userId = await getAuthUserId(ctx)
+		if (!userId) throw new Error('Unauthorized')
+
+		const thread = await ctx.db.get(args.threadId)
+		if (!thread || thread.userId !== userId) {
+			throw new Error('Thread not found or unauthorized')
+		}
+
+		await ctx.db.patch(args.threadId, {
+			pinned: !thread.pinned,
+			updatedAt: Date.now(),
+		})
+
+		return !thread.pinned
+	},
+})
+
+export const getPinnedThreads = query({
+	args: {},
+	handler: async (ctx) => {
+		const userId = await getAuthUserId(ctx)
+		if (!userId) {
+			throw new Error('Unauthorized')
+		}
+
+		const threads = await ctx.db
+			.query('threads')
+			.withIndex('by_user_and_pinned', (q) =>
+				q.eq('userId', userId).eq('pinned', true)
+			)
+			.order('desc')
+			.collect()
+
+		return threads.map((thread) => ({
+			id: thread._id,
+			title: thread.title,
+			createdAt: thread.createdAt,
+			updatedAt: thread.updatedAt,
+			model: thread.model,
+			pinned: thread.pinned,
+		}))
+	},
+})
+
+export const deleteThread = mutation({
+	args: {
+		threadId: v.id('threads'),
+	},
+	handler: async (ctx, args) => {
+		const userId = await getAuthUserId(ctx)
+		if (!userId) throw new Error('Unauthorized')
+
+		await ctx.db.delete(args.threadId)
+	},
+})
+
+export const createBranchFromMessage = mutation({
+	args: {
+		messageId: v.id('messages'),
+		newUserMessage: v.string(),
+		model: v.string(),
+	},
+	handler: async (ctx, args) => {
+		const userId = await getAuthUserId(ctx)
+		if (!userId) throw new Error('Unauthorized')
+
+		// Get the source message
+		const sourceMessage = await ctx.db.get(args.messageId)
+		if (!sourceMessage || sourceMessage.userId !== userId) {
+			throw new Error('Message not found or unauthorized')
+		}
+
+		// Get the parent thread
+		const parentThread = await ctx.db.get(sourceMessage.threadId!)
+		if (!parentThread || parentThread.userId !== userId) {
+			throw new Error('Parent thread not found or unauthorized')
+		}
+
+		// Create the new branch thread
+		const branchThreadId = await ctx.db.insert('threads', {
+			userId,
+			title: `Branch of ${parentThread.title || 'New Chat'}`,
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+			visibility: 'visible',
+			model: args.model,
+			pinned: false,
+			generationStatus: 'pending',
+			branchParentThreadId: parentThread._id,
+			branchParentPublicMessageId: sourceMessage._id,
+		})
+
+		// Get all messages up to and including the branching point
+		const allMessages = await ctx.db
+			.query('messages')
+			.withIndex('by_threadId', (q) =>
+				q.eq('threadId', sourceMessage.threadId!)
+			)
+			.order('asc')
+			.collect()
+
+		const messagesUpToBranch = allMessages.filter(
+			(msg) => msg.createdAt <= sourceMessage.createdAt
+		)
+
+		// Copy messages to the new branch thread
+		for (const msg of messagesUpToBranch) {
+			await ctx.db.insert('messages', {
+				userId,
+				threadId: branchThreadId,
+				content: msg.content,
+				role: msg.role,
+				model: msg.model,
+				status: 'done',
+				createdAt: msg.createdAt,
+				attachmentIds: msg.attachmentIds || [],
+			})
+		}
+
+		// Add the new user message to the branch
+		await ctx.db.insert('messages', {
+			userId,
+			threadId: branchThreadId,
+			content: args.newUserMessage,
+			role: 'user',
+			model: args.model,
+			status: 'waiting',
+			createdAt: Date.now(),
+			attachmentIds: [],
+		})
+
+		// Update the source message to include this branch
+		const existingBranches = sourceMessage.branches || []
+		await ctx.db.patch(args.messageId, {
+			branches: [...existingBranches, branchThreadId],
+		})
+
+		return branchThreadId
+	},
+})
